@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public List<GameObject> corazones;
     [SerializeField] public Sprite corazonQuitado, corazonActivado;
     [SerializeField] public List<GameObject> orbes;
-    [SerializeField] private Sprite orbeVerde, orbeAzul, orbeAmarillo, orbeRojo;
+    [SerializeField] public Sprite orbeVerde, orbeAzul, orbeAmarillo, orbeRojo;
     [SerializeField] private GameObject cajaTextos;
     [SerializeField] private GameObject panelOrbes;
     [SerializeField] private TMP_Text textoDialogo;
@@ -61,12 +61,30 @@ public class UIManager : MonoBehaviour
             Image imgOrbe = orbes[indice].GetComponent<Image>();
             switch (indice)
             {
-                case 0: imgOrbe.sprite = orbeVerde; break;
-                case 1: imgOrbe.sprite = orbeAzul; break;
-                case 2: imgOrbe.sprite = orbeAmarillo; break;
-                case 3: imgOrbe.sprite = orbeRojo; break;
+                case 0:
+                    imgOrbe.sprite = orbeVerde;
+                    break;
+                case 1:
+                    imgOrbe.sprite = orbeAzul;
+                    break;
+                case 2:
+                    imgOrbe.sprite = orbeAmarillo;
+                    break;
+                case 3:
+                    imgOrbe.sprite = orbeRojo;
+                    break;
             }
             imgOrbe.color = new Color(1f, 1f, 1f, 1f);
+        }
+    }
+
+    public void DesactivarOrbe(int indice)
+    {
+        if (indice >= 0 && indice < orbes.Count)
+        {
+            Image imgOrbe = orbes[indice].GetComponent<Image>();
+            imgOrbe.sprite = null;
+            imgOrbe.color = new Color(1f, 1f, 1f, 0f);
         }
     }
 
@@ -112,8 +130,8 @@ public class UIManager : MonoBehaviour
         switch (objeto)
         {
             case "BtnPocion": precioObjeto = 1; break;
-            case "BtnBotas": precioObjeto = 1; break;
-            case "BtnEspada": precioObjeto = 1; break;
+            case "BtnBotas": precioObjeto = 10; break;
+            case "BtnEspada": precioObjeto = 15; break;
         }
     }
 

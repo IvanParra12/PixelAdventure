@@ -8,6 +8,7 @@ public class ControlBotones : MonoBehaviour
 {
     public void OnBotonJugar()
     {
+        ControlDatos.Instance.ReiniciarDatos();
         SceneManager.LoadScene("Inicio");
     }
 
