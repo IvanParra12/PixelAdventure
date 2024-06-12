@@ -6,6 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 8bb2c8c89f12be747b7eda8d8998238b
+  - enabled: 1
     path: Assets/Scenes/Inicio.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Tierras Lejanas.unity
+    guid: f02ed18e03c852f42ba0a10685fd1531
+  - enabled: 1
+    path: Assets/Scenes/Pasaje misterioso.unity
+    guid: 788a82aef804ffc4fb492df8fbdf998b
+  - enabled: 1
+    path: Assets/Scenes/Bosque olvidado.unity
+    guid: ced76c07472cf3f4fafe3c5d16f76acb
+  - enabled: 1
+    path: Assets/Scenes/Cueva tenebrosa.unity
+    guid: dcaf26b27afadbd4cbc3d655278d1a8e
+  - enabled: 1
+    path: Assets/Scenes/Creditos.unity
+    guid: 88f8dcff3855a424390d8369047d4fba
+  - enabled: 1
+    path: Assets/Scenes/FinPartida.unity
+    guid: 1b263f6e06b174b46a4e7e962470ea83
   m_configObjects: {}

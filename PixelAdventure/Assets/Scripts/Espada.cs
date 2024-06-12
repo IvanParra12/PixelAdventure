@@ -5,6 +5,8 @@ using UnityEngine;
 public class Espada : MonoBehaviour
 {
     private BoxCollider2D colEspada;
+    [SerializeField] Personaje personaje;
+ 
 
     private void Awake()
     {
@@ -18,14 +20,31 @@ public class Espada : MonoBehaviour
             Orco orco = other.GetComponent<Orco>();
             if (orco != null)
             {
-                orco.Herida();
+                for (int i = 1; i <= personaje.fuerza; i++)
+                {
+                    orco.Herida();
+                }
             }
         } else if (other.CompareTag("EnemigoBosque"))
         {
             EnemigoBosque enemigoBosque = other.GetComponent<EnemigoBosque>();
             if (enemigoBosque != null)
             {
-                enemigoBosque.Herida();
+                for (int i = 1; i <= personaje.fuerza; i++)
+                {
+                    enemigoBosque.Herida();
+                }
+            }
+        }
+        else if (other.CompareTag("Boss"))
+        {
+            Boss boss = other.GetComponent<Boss>();
+            if (boss != null)
+            {
+                for (int i = 1; i <= personaje.fuerza; i++)
+                {
+                    boss.Herida();
+                }
             }
         }
     }

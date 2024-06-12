@@ -19,6 +19,7 @@ public class EnemigoBosque : MonoBehaviour
 
     private bool puedeAtacar = true;
     [SerializeField] private float tiempoEntreAtaques = 1f;
+    [SerializeField] private GameObject prefabMoneda;  // Prefab de la moneda
 
     public int vida = 1;
     public int fuerza = 1;
@@ -96,6 +97,7 @@ public class EnemigoBosque : MonoBehaviour
 
     private void Muerte()
     {
+        Instantiate(prefabMoneda, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 
