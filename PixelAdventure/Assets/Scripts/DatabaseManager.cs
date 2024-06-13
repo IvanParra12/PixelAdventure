@@ -1,87 +1,42 @@
-using System;
-using System.Data;
-using Mono.Data.Sqlite;
-using Unity.VisualScripting.Dependencies.Sqlite;
-using UnityEngine;
+using SQLite;
+using static Unity.Collections.AllocatorManager;
 
-public class DatabaseManager : MonoBehaviour
+public class Partida
 {
-    private string dbPath;
-
-    void Start()
-    {
-        // Ruta a la base de datos
-        dbPath = "URI=file:" + Application.persistentDataPath + "/GameDatabase.db";
-
-        // Crear una nueva base de datos o abrir la existente
-        CreateDatabase();
-    }
-
-    void CreateDatabase()
-    {
-        using (var connection = new SqliteConnection(dbPath))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS Partida (
-                        id_partida INTEGER PRIMARY KEY,
-                        NombreNivel TEXT,
-                        Monedas INTEGER,
-                        Vidas INTEGER,
-                        numOrbes INTEGER
-                    );
-                    CREATE TABLE IF NOT EXISTS Personaje (
-                        id_personaje INTEGER PRIMARY KEY,
-                        Fuerza INTEGER,
-                        Velocidad INTEGER,
-                        cantidadObjetos INTEGER
-                    );
-                    CREATE TABLE IF NOT EXISTS Enemigo (
-                        id_enemigo INTEGER PRIMARY KEY,
-                        Fuerza INTEGER,
-                        Velocidad INTEGER,
-                        Vidas INTEGER,
-                        Habitat TEXT
-                    );
-                    CREATE TABLE IF NOT EXISTS PartidaPersonaje (
-                        id_partida INTEGER,
-                        id_personaje INTEGER,
-                        PRIMARY KEY (id_partida, id_personaje),
-                        FOREIGN KEY (id_partida) REFERENCES Partida(id_partida),
-                        FOREIGN KEY (id_personaje) REFERENCES Personaje(id_personaje)
-                    );
-                    CREATE TABLE IF NOT EXISTS PartidaEnemigo (
-                        id_partida INTEGER,
-                        id_enemigo INTEGER,
-                        PRIMARY KEY (id_partida, id_enemigo),
-                        FOREIGN KEY (id_partida) REFERENCES Partida(id_partida),
-                        FOREIGN KEY (id_enemigo) REFERENCES Enemigo(id_enemigo)
-                    );
-                ";
-                command.ExecuteNonQuery();
-            }
-        }
-    }
-
-    public void InsertPartida(int id_partida, string nombreNivel, int monedas, int vidas, int numOrbes)
-    {
-        using (var connection = new SqliteConnection(dbPath))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "INSERT INTO Partida (id_partida, NombreNivel, Monedas, Vidas, numOrbes) VALUES (@id_partida, @NombreNivel, @Monedas, @Vidas, @numOrbes)";
-                command.Parameters.AddWithValue("@id_partida", id_partida);
-                command.Parameters.AddWithValue("@NombreNivel", nombreNivel);
-                command.Parameters.AddWithValue("@Monedas", monedas);
-                command.Parameters.AddWithValue("@Vidas", vidas);
-                command.Parameters.AddWithValue("@numOrbes", numOrbes);
-                command.ExecuteNonQuery();
-            }
-        }
-    }
-
-    // Métodos similares para insertar y manejar Personaje, Enemigo, PartidaPersonaje y PartidaEnemigo...
+    [PrimaryKey, AutoIncrement]
+    public int id_partida { get; set; }
+    public string NombreNivel { get; set; }
+    public int Monedas { get; set; }
+    public int Vidas { get; set; }
+    public int numOrbes { get; set; }
 }
+
+public class PersonajeDB
+{
+    [PrimaryKey, AutoIncrement]
+    public int id_personaje { get; set; }
+    public int vida { get; set; }
+    public int fuerza { get; set; }
+    public float velocidad { get; set; }
+    public int cantidadObjetos { get; set; }
+}
+
+
+public class EnemigoDB
+{
+    [PrimaryKey, AutoIncrement]
+    public int id_enemigo { get; set; }
+    public int id_partida { get; set; }  // Agregado para vincular con Partida
+    public string nombre { get; set; }
+    public int vida { get; set; }
+    public int fuerza { get; set; }
+    public float velocidad { get; set; }
+    public string habitat { get; set; }
+}
+
+public class PersonajePartida
+{
+    public int id_personaje { get; set; }
+    public int id_partida { get; set; }
+}
+

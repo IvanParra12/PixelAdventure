@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Boss : MonoBehaviour
+public class Boss : Enemigo
 {
     public Transform personaje;
     public GameObject puntosRutaPadre;
@@ -20,10 +20,6 @@ public class Boss : MonoBehaviour
     [SerializeField] private float tiempoEntreAtaques = 1f;
     [SerializeField] private GameObject orbeRojo;
 
-    public int vida = 1;
-    public int fuerza = 1;
-
-    // List of sprite renderers for different body parts
     public List<SpriteRenderer> bodyParts;
 
     private void Awake()
@@ -37,16 +33,13 @@ public class Boss : MonoBehaviour
         agente.updateRotation = false;
         agente.updateUpAxis = false;
 
-        // Inicializar objetivo como un nuevo GameObject temporalmente
         objetivo = new GameObject("Objetivo").transform;
 
-        // Obtener puntos de ruta de los hijos del objeto puntosRutaPadre
         foreach (Transform punto in puntosRutaPadre.transform)
         {
             puntosRutaGlobales.Add(punto.position);
         }
     }
-
     private void Update()
     {
         this.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
@@ -79,19 +72,19 @@ public class Boss : MonoBehaviour
         }
     }
 
-    public void Herida()
+    public override void Herida()
     {
-        vida--;
+        base.Herida();
         if (vida == 0)
         {
             Muerte();
         }
     }
 
-    private void Muerte()
+    protected override void Muerte()
     {
         orbeRojo.SetActive(true);
-        Destroy(this.gameObject);
+        base.Muerte();
     }
 
     void MovimientoEnemigo(bool esDetectado)
@@ -142,4 +135,3 @@ public class Boss : MonoBehaviour
         puedeAtacar = true;
     }
 }
-

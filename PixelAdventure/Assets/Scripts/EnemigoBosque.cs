@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemigoBosque : MonoBehaviour
+public class EnemigoBosque : Enemigo
 {
     public Transform personaje;
     public GameObject puntosRutaPadre; // Este objeto contendrá los puntos de ruta como hijos.
@@ -20,9 +20,6 @@ public class EnemigoBosque : MonoBehaviour
     private bool puedeAtacar = true;
     [SerializeField] private float tiempoEntreAtaques = 1f;
     [SerializeField] private GameObject prefabMoneda;  // Prefab de la moneda
-
-    public int vida = 1;
-    public int fuerza = 1;
 
     private void Awake()
     {
@@ -48,21 +45,16 @@ public class EnemigoBosque : MonoBehaviour
 
     private void Update()
     {
-        // Comprobamos que la posicion del enemigo siempre sea 0 en la z porque sino da fallo la navegacion
         this.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
         distancia = Vector3.Distance(personaje.position, this.transform.position);
 
-        // Si la posicion del enemigo es la posicion de uno de los puntos de ruta
         if (Vector3.Distance(this.transform.position, puntosRutaGlobales[indiceRuta]) < 0.1f)
         {
-            // Se comprueba que el indice es menor que la cantidad de puntos de ruta - 1
             if (indiceRuta < puntosRutaGlobales.Count - 1)
             {
-                // Si es menor sumamos 1 al indice y se dirige al siguiente punto
                 indiceRuta++;
             }
-            // Si es igual, ponemos el indice a 0 y vuelve al principio
             else if (indiceRuta == puntosRutaGlobales.Count - 1)
             {
                 indiceRuta = 0;
@@ -78,16 +70,15 @@ public class EnemigoBosque : MonoBehaviour
         RotarEnemigo();
         ActualizarAnimacion();
 
-        // Si el objetivo está detectado y puede atacar, realiza el ataque
         if (objetivoDetectado && puedeAtacar)
         {
             StartCoroutine(Atacar(personaje.gameObject));
         }
     }
 
-    public void Herida()
+    public override void Herida()
     {
-        vida--;
+        base.Herida();
         if (vida == 0)
         {
             anim.SetTrigger("Muerte");
@@ -95,10 +86,10 @@ public class EnemigoBosque : MonoBehaviour
         }
     }
 
-    private void Muerte()
+    protected override void Muerte()
     {
         Instantiate(prefabMoneda, transform.position, Quaternion.identity);
-        Destroy(this.gameObject);
+        base.Muerte();
     }
 
     void MovimientoEnemigo(bool esDetectado)
@@ -154,9 +145,8 @@ public class EnemigoBosque : MonoBehaviour
             {
                 personaje.CausarHerida();
             }
-            
         }
-        
+
         yield return new WaitForSeconds(tiempoEntreAtaques);
 
         puedeAtacar = true;

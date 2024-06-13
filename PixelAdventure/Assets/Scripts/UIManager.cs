@@ -17,33 +17,53 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject cajaTextos;
     [SerializeField] private GameObject panelOrbes;
     [SerializeField] private TMP_Text textoDialogo;
-    [SerializeField] private Button BtnEspada;
-    [SerializeField] private Button BtnBotas;
+    [SerializeField] public Button BtnEspada;
+    [SerializeField] public Button BtnBotas;
+    [SerializeField] private Button BtnPocion;
     [SerializeField] private TMP_Text textoBtnEspada;
     [SerializeField] private TMP_Text textoBtnBotas;
+    [SerializeField] private TMP_Text textoBtnPocion;
     [SerializeField] public GameObject panelEquipo;
+    [SerializeField] private GameObject panelTienda;
     [SerializeField] public GameObject imagenVelocidad;
     [SerializeField] public GameObject imagenDaño;
-
     private void Start()
     {
         Dinero.sumaMoneda += SumarMonedas;
+        CargarEstadoInicial();
         ControlDatos.Instance.CargarEstadoUI(this);
+        panelTienda.SetActive(false);  // Asegúrate de que el panel esté desactivado al inicio
     }
+
 
     private void OnDestroy()
     {
         ControlDatos.Instance.GuardarEstadoUI(this);
+        Dinero.sumaMoneda -= SumarMonedas;
     }
+
+    private void CargarEstadoInicial()
+    {
+        totalMonedas = ControlDatos.Instance.totalMonedas;  // Asegurarse de cargar el estado de las monedas al iniciar
+        ActualizarTextoMonedas(totalMonedas);
+    }
+
+    public void CargarEstadoMonedas()
+    {
+        // Asegúrate de que el ControlDatos ya está inicializado cuando llamas esto
+        if (ControlDatos.Instance != null)
+        {
+            totalMonedas = ControlDatos.Instance.totalMonedas;
+            ActualizarTextoMonedas(totalMonedas);
+        }
+    }
+
 
     private void SumarMonedas(int monedas)
     {
         totalMonedas += monedas;
-        textoMonedas.text = totalMonedas.ToString();
-        if (panelOrbes != null)
-        {
-            panelOrbes.SetActive(false);
-        }
+        ActualizarTextoMonedas(totalMonedas);
+        ControlDatos.Instance.totalMonedas = totalMonedas;
     }
 
     public void TogglePanelOrbes()
@@ -90,19 +110,25 @@ public class UIManager : MonoBehaviour
 
     public void SumaCorazones(int indice)
     {
-        Image imgCorazon = corazones[indice].GetComponent<Image>();
-        imgCorazon.sprite = corazonActivado;
+        if (indice < corazones.Count)
+        {
+            Image imgCorazon = corazones[indice].GetComponent<Image>();
+            imgCorazon.sprite = corazonActivado;
+        }
     }
 
     public void RestaCorazones(int indice)
     {
-        Image imgCorazon = corazones[indice].GetComponent<Image>();
-        imgCorazon.sprite = corazonQuitado;
+        if (indice < corazones.Count)
+        {
+            Image imgCorazon = corazones[indice].GetComponent<Image>();
+            imgCorazon.sprite = corazonQuitado;
+        }
     }
 
-    public void ActualizarTextoMonedas()
+    public void ActualizarTextoMonedas(int monedas)
     {
-        textoMonedas.text = totalMonedas.ToString();
+        textoMonedas.text = monedas.ToString();
     }
 
     public void EstadoCajaTexto(bool activado)
@@ -117,12 +143,18 @@ public class UIManager : MonoBehaviour
 
     public void MostrarImagenFuerza()
     {
-        if (imagenDaño != null) imagenDaño.SetActive(true);
+        if (imagenDaño != null)
+        {
+            imagenDaño.SetActive(true);
+        }
     }
 
     public void MostrarImagenVelocidad()
     {
-        if (imagenVelocidad != null) imagenVelocidad.SetActive(true);
+        if (imagenVelocidad != null)
+        {
+            imagenVelocidad.SetActive(true);
+        }
     }
 
     public void PrecioObjeto(string objeto)
@@ -137,40 +169,61 @@ public class UIManager : MonoBehaviour
 
     public void comprarObjeto(string objeto)
     {
+        Debug.Log($"Intentando comprar {objeto}, Monedas disponibles: {totalMonedas}, Precio: {precioObjeto}");
         PrecioObjeto(objeto);
-        bool espadaComprada = false;
-        bool botasCompradas = false;
-
-        if (precioObjeto <= totalMonedas && totalObjetos < 3)
+        if (totalMonedas >= precioObjeto && totalObjetos < 3)
         {
-            if (objeto == "BtnEspada" && !espadaComprada)
+            if (objeto == "BtnEspada" && BtnEspada.interactable)
             {
-                espadaComprada = true;
+                totalMonedas -= precioObjeto;
+                ActualizarTextoMonedas(totalMonedas);
+                AgregarAlPanelEquipo(objeto);
                 BtnEspada.interactable = false;
                 textoBtnEspada.text = "Comprado";
-                AgregarAlPanelEquipo(objeto);
             }
-            else if (objeto == "BtnBotas" && !botasCompradas)
+            else if (objeto == "BtnBotas" && BtnBotas.interactable)
             {
-                botasCompradas = true;
+                totalMonedas -= precioObjeto;
+                ActualizarTextoMonedas(totalMonedas);
+                AgregarAlPanelEquipo(objeto);
                 BtnBotas.interactable = false;
                 textoBtnBotas.text = "Comprado";
-                AgregarAlPanelEquipo(objeto);
             }
-            else if (objeto != "BtnEspada" && objeto != "BtnBotas")
+            else if (objeto == "BtnPocion")
             {
-                AgregarAlPanelEquipo(objeto);
+                if (totalObjetos < 3)
+                {
+                    totalMonedas -= precioObjeto;
+                    ActualizarTextoMonedas(totalMonedas);
+                    AgregarAlPanelEquipo(objeto);
+                }
             }
+        }
+        else
+        {
+            Debug.Log("No tienes suficientes monedas o has alcanzado el límite de objetos.");
+        }
+    }
+
+    public void CerrarPanelTienda()
+    {
+        if (!panelTienda.activeSelf) return;
+        float distancia = Vector2.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, this.transform.position);
+        if (distancia > 5) // Ejemplo: cerrar si el jugador se aleja más de 5 unidades
+        {
+            panelTienda.SetActive(false);
         }
     }
 
     public void AgregarAlPanelEquipo(string objeto)
     {
-        totalObjetos++;
-        totalMonedas -= precioObjeto;
-        textoMonedas.text = totalMonedas.ToString();
-
         GameObject equipo = (GameObject)Resources.Load(objeto);
-        Instantiate(equipo, Vector3.zero, Quaternion.identity, panelEquipo.transform);
+        if (equipo != null && totalObjetos < 3)
+        {
+            GameObject nuevoEquipo = Instantiate(equipo, Vector3.zero, Quaternion.identity, panelEquipo.transform);
+            nuevoEquipo.name = equipo.name; // Quita el "(Clone)" para manejo uniforme
+            ControlDatos.Instance.objetosEnPanel.Add(nuevoEquipo.name);
+            totalObjetos++;
+        }
     }
 }

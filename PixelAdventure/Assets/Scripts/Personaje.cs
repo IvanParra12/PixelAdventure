@@ -13,9 +13,10 @@ public class Personaje : MonoBehaviour
     private float offsetY = 0;
     public bool hablando;
 
-    public int vida = 5;
-    public int fuerza = 1;
-    public int numOrbes = 0;
+    public int vida;
+    public int fuerza;
+    public int numOrbes; // Cantidad de orbes
+    public int cantidadObjetos; // Cantidad de objetos
     private const int orbesNecesarios = 4;
     private UIManager uiManager;
 
@@ -24,16 +25,15 @@ public class Personaje : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        uiManager = GameObject.FindObjectOfType<UIManager>();
+        uiManager = FindObjectOfType<UIManager>();
 
         // Cargar el estado del personaje desde el singleton al iniciar
-        ControlDatos.Instance.CargarEstadoPersonaje(this);
-    }
-
-    private void OnDestroy()
-    {
-        // Guardar el estado del personaje en el singleton antes de destruirlo
-        ControlDatos.Instance.GuardarEstadoPersonaje(this);
+        vida = ControlDatos.Instance.vida;
+        fuerza = ControlDatos.Instance.fuerza;
+        velocidad = ControlDatos.Instance.velocidad;
+        cantidadObjetos = ControlDatos.Instance.cantidadObjetos;
+        numOrbes = ControlDatos.Instance.numOrbes;
+        uiManager.ActualizarTextoMonedas(ControlDatos.Instance.totalMonedas);
     }
 
     private void Update()
@@ -59,6 +59,7 @@ public class Personaje : MonoBehaviour
         Movimiento();
     }
 
+
     public void EstadoConversacion(bool habla)
     {
         hablando = habla;
@@ -66,7 +67,9 @@ public class Personaje : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Tienda"))
+        if (other.CompareTag("Tienda") || other.CompareTag("Orco")
+            || other.CompareTag("Mole") || other.CompareTag("Treant")
+            || other.CompareTag("Volador"))
         {
             hablando = false;
         }
@@ -97,6 +100,7 @@ public class Personaje : MonoBehaviour
         if (vida > 0)
         {
             vida--;
+            ControlDatos.Instance.vida = vida;  // Actualizar la vida en ControlDatos
             uiManager.RestaCorazones(vida);
             animator.SetTrigger("Herido");
 
@@ -112,8 +116,9 @@ public class Personaje : MonoBehaviour
     {
         if (vida < 5)
         {
-            uiManager.SumaCorazones(vida);
             vida++;
+            ControlDatos.Instance.vida = vida;  // Actualizar la vida en ControlDatos
+            uiManager.SumaCorazones(vida - 1);  // Asegurarse de pasar el índice correcto
         }
     }
 
@@ -133,6 +138,9 @@ public class Personaje : MonoBehaviour
         {
             uiManager.ActivarOrbe(numOrbes);
             numOrbes++;
+            ControlDatos.Instance.numOrbes = numOrbes; // Actualizar en el singleton
+            string escenaActual = SceneManager.GetActiveScene().name;
+            ControlDatos.Instance.RecogerOrbe(escenaActual);
             if (numOrbes == 4)
             {
                 GanarPartida();
@@ -140,14 +148,23 @@ public class Personaje : MonoBehaviour
         }
     }
 
-    private void GanarPartida()
+    public void RecogerObjeto()
     {
+        cantidadObjetos++;
+        ControlDatos.Instance.cantidadObjetos = cantidadObjetos;
+    }
+    public void Muerte()
+    {
+        ControlDatos.Instance.GuardarPartida();
+        ControlDatos.Instance.GuardarEstadoCompleto();
+        SceneManager.LoadScene("FinPartida");
+    }
+
+    public void GanarPartida()
+    {
+        ControlDatos.Instance.GuardarPartida();
+        ControlDatos.Instance.GuardarEstadoCompleto();
         SceneManager.LoadScene("Creditos");
     }
 
-    private void Muerte()
-    {
-        Destroy(this.gameObject);
-        SceneManager.LoadScene("FinPartida");
-    }
 }

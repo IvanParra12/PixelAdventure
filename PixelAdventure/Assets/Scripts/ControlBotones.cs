@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +7,7 @@ public class ControlBotones : MonoBehaviour
     {
         ControlDatos.Instance.ReiniciarDatos();
         SceneManager.LoadScene("Inicio");
+        ControlDatos.Instance.CrearNuevaPartida();  // Método nuevo para crear una nueva partida
     }
 
     public void OnBotonCreditos()
@@ -25,5 +23,17 @@ public class ControlBotones : MonoBehaviour
     public void OnBotonSalir()
     {
         Application.Quit();
+    }
+
+    public void OnGuardarPartida()
+    {
+        var uiManager = GameObject.FindObjectOfType<UIManager>();
+        ControlDatos.Instance.GuardarEstadoCompleto();
+    }
+
+    public void OnCargarPartida()
+    {
+        var uiManager = GameObject.FindObjectOfType<UIManager>();
+        ControlDatos.Instance.CargarEstadoCompleto(1, 1, uiManager);
     }
 }

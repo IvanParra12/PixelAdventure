@@ -25,7 +25,8 @@ public class Espada : MonoBehaviour
                     orco.Herida();
                 }
             }
-        } else if (other.CompareTag("EnemigoBosque"))
+        } 
+        else if (other.CompareTag("Mole") || other.CompareTag("Treant"))
         {
             EnemigoBosque enemigoBosque = other.GetComponent<EnemigoBosque>();
             if (enemigoBosque != null)
@@ -33,6 +34,17 @@ public class Espada : MonoBehaviour
                 for (int i = 1; i <= personaje.fuerza; i++)
                 {
                     enemigoBosque.Herida();
+                }
+            }
+        }
+        else if (other.CompareTag("Volador"))
+        {
+            Orco orco = other.GetComponent<Orco>();
+            if (orco != null)
+            {
+                for (int i = 1; i <= personaje.fuerza; i++)
+                {
+                    orco.Herida();
                 }
             }
         }

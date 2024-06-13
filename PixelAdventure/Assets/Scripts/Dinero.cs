@@ -8,21 +8,13 @@ public class Dinero : MonoBehaviour
     public static event SumaMoneda sumaMoneda;
 
     [SerializeField] private int cantidadMonedas;
- 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player")) 
+        if (other.gameObject.CompareTag("Player"))
         {
-            if (sumaMoneda != null)
-            {
-                SumarMoneda();
-                Destroy(this.gameObject);
-            }
+            sumaMoneda?.Invoke(cantidadMonedas);
+            Destroy(this.gameObject);  // Esto debería garantizar que el evento se dispare una sola vez
         }
     }
 
-    private void SumarMoneda()
-    {
-        sumaMoneda(cantidadMonedas);
-    }
 }

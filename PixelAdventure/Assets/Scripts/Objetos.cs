@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using static Objetos;
 
 public class Objetos : MonoBehaviour
@@ -30,16 +29,27 @@ public class Objetos : MonoBehaviour
                 }
                 break;
             case ObjetosEquipo.Velocidad:
-                uiManager.MostrarImagenVelocidad();
-                Destroy(this.gameObject);
+                if (!ControlDatos.Instance.mejoraVelocidadActivada) // Solo permitir una vez
+                {
+                    personaje.AumentoVelocidad();
+                    uiManager.MostrarImagenVelocidad();
+                    ControlDatos.Instance.velocidad = personaje.velocidad; // Actualizar en ControlDatos
+                    ControlDatos.Instance.mejoraVelocidadActivada = true;
+                    Destroy(this.gameObject);
+                }
                 break;
             case ObjetosEquipo.Daño:
-                uiManager.MostrarImagenFuerza();
-                personaje.AumentoFuerza();
-                Destroy(this.gameObject);
+                if (!ControlDatos.Instance.mejoraFuerzaActivada) // Solo permitir una vez
+                {
+                    personaje.AumentoFuerza();
+                    uiManager.MostrarImagenFuerza();
+                    ControlDatos.Instance.fuerza = personaje.fuerza; // Actualizar en ControlDatos
+                    ControlDatos.Instance.mejoraFuerzaActivada = true;
+                    Destroy(this.gameObject);
+                }
                 break;
-
         }
+
         uiManager.totalObjetos--;
     }
 }

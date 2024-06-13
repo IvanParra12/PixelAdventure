@@ -179,9 +179,12 @@ MonoBehaviour:
   textoDialogo: {fileID: 1432704375}
   BtnEspada: {fileID: 899738845}
   BtnBotas: {fileID: 970771937}
+  BtnPocion: {fileID: 754792804}
   textoBtnEspada: {fileID: 644886619}
   textoBtnBotas: {fileID: 1248219731}
+  textoBtnPocion: {fileID: 1954745036}
   panelEquipo: {fileID: 1760687407}
+  panelTienda: {fileID: 79397795}
   imagenVelocidad: {fileID: 1100733994}
   "imagenDa\xF1o": {fileID: 766726004}
 --- !u!114 &54874328
@@ -307,8 +310,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 161, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 168.2, y: 22.4}
+  m_SizeDelta: {x: 283.771, y: 56.58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &75720484
 MonoBehaviour:
@@ -330,17 +333,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Monedas: '
+  m_text: 'Monedas : '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e1b0800f2120c6d4cb62b9f0697e73ad, type: 2}
-  m_sharedMaterial: {fileID: 8194211293514356360, guid: e1b0800f2120c6d4cb62b9f0697e73ad, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9862517706473e94d8f0877993be571c, type: 2}
+  m_sharedMaterial: {fileID: 7343196325725714890, guid: 9862517706473e94d8f0877993be571c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278244588
-  m_fontColor: {r: 0.9245283, g: 0.83088404, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -357,8 +360,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 90
+  m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -393,7 +396,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -119.76492, w: 0}
+  m_margin: {x: 0, y: 0, z: -117.970055, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -4205,15 +4208,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e1b0800f2120c6d4cb62b9f0697e73ad, type: 2}
-  m_sharedMaterial: {fileID: 8194211293514356360, guid: e1b0800f2120c6d4cb62b9f0697e73ad, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9862517706473e94d8f0877993be571c, type: 2}
+  m_sharedMaterial: {fileID: 7343196325725714890, guid: 9862517706473e94d8f0877993be571c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278244588
-  m_fontColor: {r: 0.9245283, g: 0.83088404, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4230,8 +4233,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 90
+  m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5526,7 +5529,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Mejora da\xF1o\n30 mo"
+  m_text: "Mejora da\xF1o\n15 mo"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6992,9 +6995,10 @@ MonoBehaviour:
   velocidad: 3
   colEspada: {fileID: 407947848}
   hablando: 0
-  vida: 3
+  vida: 5
   fuerza: 5
   numOrbes: 0
+  cantidadObjetos: 0
 --- !u!50 &1082460698
 Rigidbody2D:
   serializedVersion: 4
@@ -8361,7 +8365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5882353, g: 0.49803925, b: 0.40784317, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8578,7 +8582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.83921576, g: 0.83921576, b: 0.83921576, a: 1}
+  m_Color: {r: 0.8862746, g: 0.8313726, b: 0.63529414, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9728,8 +9732,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: TIENDA
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e1b0800f2120c6d4cb62b9f0697e73ad, type: 2}
-  m_sharedMaterial: {fileID: 8194211293514356360, guid: e1b0800f2120c6d4cb62b9f0697e73ad, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9862517706473e94d8f0877993be571c, type: 2}
+  m_sharedMaterial: {fileID: 7343196325725714890, guid: 9862517706473e94d8f0877993be571c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9933,7 +9937,7 @@ PrefabInstance:
     - target: {fileID: 6686739389448265509, guid: 68193bef8da4a564ab6d2c9a5464ac48, type: 3}
       propertyPath: uiManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 54874327}
     - target: {fileID: 8502570192238331922, guid: 68193bef8da4a564ab6d2c9a5464ac48, type: 3}
       propertyPath: m_Name
       value: Desconocido
@@ -10018,7 +10022,7 @@ PrefabInstance:
     - target: {fileID: 4981427405716115721, guid: 003ddc43ee8c9be48b8f5ee0187c5787, type: 3}
       propertyPath: uiManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 54874327}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
